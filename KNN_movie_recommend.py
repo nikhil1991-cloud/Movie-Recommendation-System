@@ -101,7 +101,7 @@ movies['keywords'] = movies['keywords'].str.split(',')
 i=0
 for i in range (0,len(movies)):
     cList = []
-    cList = movies['cast'][i][:1]
+    cList = movies['cast'][i][0]
     movies.loc[i,'cast']=str(cList)
 movies['cast'] = movies['cast'].str.strip('[]').str.replace(' ','').str.replace("'",'').str.replace('"','')
 movies['cast'] = movies['cast'].str.split(',')
@@ -197,20 +197,20 @@ for g in range (0,len(dmList)):
 
 
 #Ask for input and run K-NN for predicting rating with K=5 and list recommended movies with K=50 and rating above 6.8
+ALL_OHE = np.concatenate((OHE_genre,OHE_key,OHE_cast,OHE_dir),axis=1)
+Title = np.array(movies['original_title'])
+Keys = np.array(movies['keywords'])
+Gn = np.array(movies['genres'])
+Rating = np.array(movies['vote_average'])
+Director = np.array(movies['director'])
+Cast = np.array(movies['cast'])
 des='no'
 while des != 'yes':
  Input = str(input("Enter your movie: "))
- Title = np.array(movies['original_title'])
- Keys = np.array(movies['keywords'])
- Gn = np.array(movies['genres'])
- Rating = np.array(movies['vote_average'])
- Director = np.array(movies['director'])
- Cast = np.array(movies['cast'])
  if np.shape(np.where(Title==Input))[1] == 0:
     print("The name you entered is incorrect. Please enter the correct name.")
  else:
     P_index = np.where(Title==Input)[0][0]
-    ALL_OHE = np.concatenate((OHE_genre,OHE_key,OHE_cast,OHE_dir),axis=1)
     X_p = ALL_OHE[P_index]
     dist = np.zeros(len(OHE_genre))
     for j in range (0,len(OHE_genre)):
